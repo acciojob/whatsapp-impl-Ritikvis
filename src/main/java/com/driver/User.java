@@ -1,7 +1,7 @@
 package com.driver;
 
 public class User {
-    private String name;
+    private static String name;
     private String mobile;
     public User(){
 
@@ -12,7 +12,9 @@ public class User {
         this.mobile = mobile;
     }
 
-    public String getName() {
+
+
+    public static String getName() {
         return name;
     }
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
-    private String name;
+    private static String name;
     private List<User> participants;
 
     public Group(String name, int size) {
@@ -14,7 +14,7 @@ public class Group {
         this.participants = new ArrayList<>();
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 

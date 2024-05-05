@@ -2,7 +2,7 @@ package com.driver;
 
 import java.util.*;
 
-import org.apache.logging.log4j.message.Message;
+import com.driver.Message;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/whatsapp")
-public class WhatsappController {
+public class WhatsappController<SenderId, GroupId> {
 
     // Autowiring will not work in this case, no need to add @Autowired annotation
     WhatsappService whatsappService = new WhatsappService();
@@ -33,33 +33,49 @@ public class WhatsappController {
         return whatsappService.createMessage(content);
     }
 
-    @PutMapping("/send-message")
-    public int sendMessage(@RequestBody Message message, @RequestParam String senderId, @RequestParam String groupId) throws Exception {
-        User sender = whatsappService.getUserById(senderId);
-        Group group = whatsappService.getGroupById(groupId);
+    @PostMapping("/send-message")
+    public int sendMessage(@RequestBody Message message,
+                           @RequestParam SenderId senderId,
+                           @RequestParam GroupId groupId) throws Exception {
+        // Retrieve the sender and group using their IDs
+        User sender = whatsappService.getUserById(User.getName());
+        Group group = whatsappService.getGroupById(Group.getName());
+
+        // Check if the group exists
         if (group == null) {
             throw new IllegalArgumentException("Group does not exist.");
         }
+
+        // Check if the sender is a member of the group
         if (!whatsappService.isUserMemberOfGroup(sender, group)) {
             throw new IllegalArgumentException("You are not allowed to send message.");
         }
-        return whatsappService.sendMessage(message, sender, group);
+
+        // Call the service layer to send the message
+        int numMessages = whatsappService.sendMessage((org.apache.logging.log4j.message.Message) message, sender, group);
+        return numMessages;
     }
 
     @PutMapping("/change-admin")
-    public String changeAdmin(@RequestParam String approverId, @RequestParam String userId, @RequestParam String groupId) throws Exception {
-        User approver = whatsappService.getUserById(approverId);
-        User user = whatsappService.getUserById(userId);
-        Group group = whatsappService.getGroupById(groupId);
+    public String changeAdmin(@RequestBody User approver,
+                              @RequestBody User user,
+                              @RequestBody Group group) throws Exception {
+        // Check if the group exists
         if (group == null) {
             throw new IllegalArgumentException("Group does not exist.");
         }
+
+        // Check if the approver is an admin
         if (!whatsappService.isAdmin(approver)) {
             throw new IllegalArgumentException("Approver does not have rights.");
         }
+
+        // Check if the user is a participant in the group
         if (!whatsappService.isUserMemberOfGroup(user, group)) {
             throw new IllegalArgumentException("User is not a participant.");
         }
+
+        // Call the service layer to change the admin
         whatsappService.changeAdmin(user, group);
         return "SUCCESS";
     }

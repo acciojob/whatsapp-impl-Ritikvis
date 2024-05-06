@@ -1,25 +1,16 @@
 package com.driver;
 
 public class User {
-    private static String name;
+    private String name;
     private String mobile;
-    public User(){
 
-    }
-
-    public User(String name, String mobile) {
+    public User(String name, String mobile){
         this.name = name;
         this.mobile = mobile;
     }
 
+    public User(){
 
-
-    public static String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getMobile() {
@@ -28,5 +19,13 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

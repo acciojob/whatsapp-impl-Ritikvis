@@ -14,6 +14,10 @@ public class Group {
         this.participants = new ArrayList<>();
     }
 
+    public Group() {
+
+    }
+
     public static String getName() {
         return name;
     }

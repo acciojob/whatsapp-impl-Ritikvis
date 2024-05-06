@@ -1,24 +1,19 @@
 package com.driver;
 
-import org.apache.catalina.User;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Group {
-    private static String name;
-    private List<User> participants;
+    private String name;
+    private int numberOfParticipants;
 
-    public Group(String name, int size) {
+    public Group(String name, int numberOfParticipants){
         this.name = name;
-        this.participants = new ArrayList<>();
+        this.numberOfParticipants = numberOfParticipants;
     }
 
-    public Group() {
+    public Group(){
 
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
@@ -26,23 +21,11 @@ public class Group {
         this.name = name;
     }
 
-    public List<User> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
-    }
-
-    public void addParticipant(User user) {
-        participants.add(user);
-    }
-
-    public void removeParticipant(User user) {
-        participants.remove(user);
-    }
-
     public int getNumberOfParticipants() {
-        return participants.size();
+        return numberOfParticipants;
+    }
+
+    public void setNumberOfParticipants(int numberOfParticipants) {
+        this.numberOfParticipants = numberOfParticipants;
     }
 }
